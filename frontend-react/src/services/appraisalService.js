@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Backend URL + API key. The key must match the backend's SERVER_API_KEY.
 const BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:9090"
+  import.meta.env.VITE_API_BASE_URL || "https://appraisal-kpbc.onrender.com"
 ).replace(/\/+$/, "");
 const API_KEY = import.meta.env.VITE_SERVER_API_KEY || "";
 
