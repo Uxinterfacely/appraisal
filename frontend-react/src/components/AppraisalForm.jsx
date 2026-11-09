@@ -222,7 +222,14 @@ export default function AppraisalForm() {
       } else {
         lastLookup.current = ""; // allow a retry
         console.error("Employee lookup failed:", requestError.response?.data || requestError);
-        setLookupHint("Could not look up this employee. Enter the details by hand.");
+        const serverMessage = requestError.response?.data?.message;
+        setLookupHint(
+          requestError.code === "ECONNABORTED"
+            ? "The server did not answer in time (it may be starting up). Wait a minute, then retype the last character of the ID."
+            : serverMessage
+            ? `Could not look up this employee: ${serverMessage}`
+            : "Could not look up this employee. Enter the details by hand."
+        );
       }
     }
   };
