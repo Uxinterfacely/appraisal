@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
  * lists and searches never touch these columns.
  */
 @Entity
-@Table(name = "appraisal_table")
+@Table(name = "appraisal_letters")
 public class AppraisalPdf {
 
     @Id
