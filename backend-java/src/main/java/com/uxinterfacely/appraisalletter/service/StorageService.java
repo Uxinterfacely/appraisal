@@ -27,13 +27,13 @@ public class StorageService {
 
     private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
-    @Value("${app.supabase.url:}")
+    @Value("${app.supabase.url:https://vtliwqjzdjvlgteuxdzc.supabase.co}")
     private String supabaseUrl;
 
-    @Value("${app.supabase.service-key:}")
+    @Value("${app.supabase.service-key:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0bGl3cWp6ZGp2bGd0ZXV4ZHpjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTAzNTYyNywiZXhwIjoyMTA0NjExNjI3fQ.JXiuzIGCRNIyXdErAdoJv4t7LB8Nsa9yKM_PUdqC-uk}")
     private String serviceKey;
 
-    @Value("${app.supabase.bucket:appraisal_letter}")
+    @Value("${app.supabase.bucket:appraisal_letters}")
     private String bucket;
 
     private final HttpClient http = HttpClient.newBuilder()
