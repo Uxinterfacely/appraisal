@@ -3,6 +3,8 @@ package com.uxinterfacely.appraisalletter.service;
 import com.uxinterfacely.appraisalletter.model.Appraisal;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+
     private final JavaMailSender mailSender;
 
     @Value("${app.from-email}")
@@ -20,6 +24,12 @@ public class EmailService {
 
     @Value("${app.company-name}")
     private String companyName;
+
+    @Value("${spring.mail.host:}")
+    private String mailHost;
+
+    @Value("${spring.mail.port:0}")
+    private int mailPort;
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -49,7 +59,15 @@ public class EmailService {
 
             mailSender.send(message);
         } catch (MessagingException | MailException e) {
-            throw new IllegalStateException("Unable to send appraisal email. Check SMTP settings.", e);
+            // Dig out the mail server's own reason (wrong login, blocked port, sender not allowed...).
+            Throwable root = e;
+            while (root.getCause() != null && root.getCause() != root) {
+                root = root.getCause();
+            }
+            String reason = root.getMessage() == null ? root.getClass().getSimpleName() : root.getMessage();
+            log.error("Email to {} failed (host={}, port={}, from={}): {}", to, mailHost, mailPort, fromEmail, reason, e);
+            throw new IllegalStateException(
+                    "Unable to send appraisal email (" + mailHost + ":" + mailPort + "): " + reason, e);
         }
     }
 
